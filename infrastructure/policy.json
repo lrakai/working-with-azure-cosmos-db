@@ -1,0 +1,62 @@
+{
+	"parameters": {
+     	"allowedLocations": {
+            "type": "array",
+            "metadata": {
+                "description": "The list of locations that can be specified when deploying resources",
+                "strongType": "location",
+                "displayName": "Allowed locations"
+            }
+        },
+        "allowedServices": {
+            "type": "array",
+            "metadata": {
+                "description": "The list of Resource Types that are allowed.",
+                "strongType": "type",
+                "displayName": "Allowed resources"
+            }
+        }
+    },
+    "displayName": "Allowed locations, services",
+    "description": "This policy restrict the allowed locations, services.",
+    "policyRule": {
+        "if": {
+            "anyOf": [
+                {
+                    "not": {
+                        "field": "type",
+                        "in": "[parameters('allowedServices')]"
+                    }
+                },
+                {
+                    "not": {
+                        "field": "location",
+                        "in": "[parameters('allowedLocations')]"
+                    }
+                }
+            ]
+        },
+        "then": {
+            "effect": "deny"
+        }
+    },
+    "parameters_values": {
+        "allowedLocations": {
+            "value": [
+                "{RGLocation}"
+            ]
+        },
+        "allowedServices": {
+            "value": [
+                "Microsoft.Web/serverfarms",
+                "Microsoft.Web/sites",
+                "Microsoft.Storage/storageAccounts",
+                "Microsoft.DocumentDB/databaseAccounts",
+                "Microsoft.DocumentDB/databaseAccountNames",
+                "Microsoft.DocumentDB/operations",
+                "Microsoft.DocumentDB/operationResults",
+                "Microsoft.DocumentDB/locations"
+            ]
+        }
+    }
+}
