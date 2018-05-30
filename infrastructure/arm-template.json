@@ -21,13 +21,22 @@
             "metadata": {
                 "description": "Storage Account type"
             }
+        },
+        "cloudShellStorageAccount": {
+            "type": "string",
+            "defaultValue": "cacloudshell"
+        },
+        "cloudShellStorageAccountType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS"
         }
     },
     "variables": {
         "functionAppName": "[parameters('appName')]",
         "hostingPlanName": "[concat(parameters('appName'), '-plan')]",
         "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'functions')]",
-        "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+        "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+        "cloudShellStorageAccountName": "[toLower(replace(concat(parameters('cloudShellStorageAccount'), resourceGroup().name),'-', ''))]"
     },
     "resources": [
         {
@@ -37,6 +46,15 @@
             "location": "[resourceGroup().location]",
             "properties": {
                 "accountType": "[parameters('storageAccountType')]"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('cloudShellStorageAccountName')]",
+            "apiVersion": "2015-06-15",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "accountType": "[parameters('cloudShellStorageAccountType')]"
             }
         },
         {
