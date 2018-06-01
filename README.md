@@ -1,6 +1,8 @@
 # working-with-azure-cosmos-db
 
-Tutorial illustrating how to use Azure Cosmos DB
+Tutorial illustrating how to work with Azure Cosmos DB
+
+![Final Environment](https://user-images.githubusercontent.com/3911650/40856764-3b026130-6596-11e8-9cff-a39e35117397.png)
 
 ## Getting Started
 
