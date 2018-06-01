@@ -26,7 +26,45 @@ Alternatively, you can perform a one-click deploy with the following button:
 
 ## Following Along
 
-1. 
+1. Create a MongoDB API Cosmos DB account replicated in the regions you desire
+1. Create a stocks database and a ticker collection
+1. Create a custom Azure function with a Cosmos DB trigger
+1. Replace the default run.csx C# script with the following function:
+    ```csharp
+    #r "Microsoft.Azure.Documents.Client"
+    #r "Newtonsoft.Json"
+    using System;
+    using System.Collections.Generic;
+    using Microsoft.Azure.Documents;
+
+    public static void Run(IReadOnlyList<Document> documents, TraceWriter log)
+    {
+        if (documents != null && documents.Count > 0)
+        {
+            log.Verbose($"Documents modified {documents.Count}");
+            log.Verbose($"First document: {documents[0].ToString()}");
+            var doc = Newtonsoft.Json.JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(documents[0].ToString());
+            var symbol = doc["$v"]["id"]["$v"].ToString();
+            if (symbol == "ABC") {
+                var price = (double)doc["$v"]["price"]["$v"];
+                if (price > 15) {
+                    log.Info("Sell ABC!");
+                }
+                else if (price < 10) {
+                    log.Info("Buy ABC!");
+                }
+            }
+        }
+    }
+    ```
+1. Insert the following document into the MongoDB collection:
+    ```json
+    {
+        "id": "ABC",
+        "price": 22.13
+    }
+    ```
+1. Check the Function monitoring log for the buy/sell signal
 
 ## Tearing Down
 
