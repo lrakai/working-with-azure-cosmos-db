@@ -1,4 +1,15 @@
 {
+    "permissions": [{
+      "actions": [
+        "*"
+      ],
+      "notActions": [
+        "Microsoft.Authorization/*/Delete",
+        "Microsoft.Authorization/*/Write",
+        "Microsoft.Authorization/elevateAccess/Action",
+        "Microsoft.MarketplaceOrdering/*"
+      ]
+    }],
 	"parameters": {
      	"allowedLocations": {
             "type": "array",
@@ -43,7 +54,8 @@
     "parameters_values": {
         "allowedLocations": {
             "value": [
-                "{RGLocation}"
+                "{RGLocation}",
+                "WestUS"
             ]
         },
         "allowedServices": {
